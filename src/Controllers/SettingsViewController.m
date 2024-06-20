@@ -63,29 +63,22 @@
 }
 
 // Pref Link Cell
-- (PSSpecifier *)newHBLinkCellWithTitle:(NSString *)titleText detailTitle:(NSString *)detailText url:(NSString *)url {
-    PSSpecifier *HBLinkCell = [PSSpecifier preferenceSpecifierNamed:titleText target:self set:@selector(setPreferenceValue:specifier:) get:@selector(readPreferenceValue:) detail:nil cell:PSButtonCell edit:nil];
+- (PSSpecifier *)newLinkCellWithTitle:(NSString *)titleText detailTitle:(NSString *)detailText url:(NSString *)url iconURL:(NSString *)iconURL {
+    PSSpecifier *LinkCell = [PSSpecifier preferenceSpecifierNamed:titleText target:self set:@selector(setPreferenceValue:specifier:) get:@selector(readPreferenceValue:) detail:nil cell:PSButtonCell edit:nil];
     
-    [HBLinkCell setButtonAction:@selector(hb_openURL:)];
-    [HBLinkCell setProperty:HBLinkTableCell.class forKey:@"cellClass"];
-    [HBLinkCell setProperty:url forKey:@"url"];
+    [LinkCell setButtonAction:@selector(hb_openURL:)];
+    [LinkCell setProperty:HBLinkTableCell.class forKey:@"cellClass"];
+    [LinkCell setProperty:url forKey:@"url"];
     if (detailText != nil) {
-        [HBLinkCell setProperty:detailText forKey:@"subtitle"];
+        [LinkCell setProperty:detailText forKey:@"subtitle"];
     }
-    return HBLinkCell;
-}
-
-// Pref Twitter Cell
-- (PSSpecifier *)newHBTwitterCellWithTitle:(NSString *)titleText twitterUsername:(NSString *)user customAvatarURL:(NSString *)avatarURL {
-    PSSpecifier *TwitterCell = [PSSpecifier preferenceSpecifierNamed:titleText target:self set:@selector(setPreferenceValue:specifier:) get:@selector(readPreferenceValue:) detail:nil cell:1 edit:nil];
-    
-    [TwitterCell setButtonAction:@selector(hb_openURL:)];
-    [TwitterCell setProperty:HBTwitterCell.class forKey:@"cellClass"];
-    [TwitterCell setProperty:user forKey:@"user"];
-    [TwitterCell setProperty:@YES forKey:@"big"];
-    [TwitterCell setProperty:@56 forKey:@"height"];
-    [TwitterCell setProperty:avatarURL forKey:@"iconURL"];
-    return TwitterCell;
+    if (iconURL != nil) {
+        [LinkCell setProperty:iconURL forKey:@"iconURL"];
+        [LinkCell setProperty:@YES forKey:@"iconCircular"];
+        [LinkCell setProperty:@YES forKey:@"big"];
+        [LinkCell setProperty:@56 forKey:@"height"];
+    }
+    return LinkCell;
 }
 
 // Tweak settings
@@ -101,6 +94,7 @@
             [self newSwitchCellWithTitle:@"Hide explore posts grid" detailTitle:@"Hides the grid of suggested posts on the explore/search tab" key:@"hide_explore_grid" defaultValue:false changeAction:nil],
             [self newSwitchCellWithTitle:@"Hide trending searches" detailTitle:@"Hides the trending searches under the explore search bar" key:@"hide_trending_searches" defaultValue:true changeAction:nil],
             [self newSwitchCellWithTitle:@"No suggested chats" detailTitle:@"Hides the suggested broadcast channels in direct messages" key:@"no_suggested_chats" defaultValue:true changeAction:nil],
+            [self newSwitchCellWithTitle:@"No suggested users" detailTitle:@"Hides the suggested users for you to follow" key:@"no_suggested_users" defaultValue:false changeAction:nil],
 
             // Section 2: Feed
             [self newSectionWithTitle:@"Feed" footer:nil],
@@ -144,8 +138,9 @@
 
             // Section 8: Credits
             [self newSectionWithTitle:@"Credits" footer:[NSString stringWithFormat:@"SCInsta %@", SCIVersionString]],
-            [self newHBTwitterCellWithTitle:@"Developer" twitterUsername:@"SoVeryCuul" customAvatarURL:@"https://unavatar.io/twitter/SoVeryCuul"],
-            [self newHBLinkCellWithTitle:@"View Repo" detailTitle:@"View the tweak's source code on GitHub" url:@"https://github.com/SoCuul/SCInsta"]
+            [self newLinkCellWithTitle:@"Developer" detailTitle:@"SoCuul" url:@"https://socuul.dev" iconURL:@"https://i.imgur.com/WSFMSok.png"],
+            [self newLinkCellWithTitle:@"Donate" detailTitle:@"Consider donating if you enjoy this tweak!" url:@"https://ko-fi.com/socuul" iconURL:nil],
+            [self newLinkCellWithTitle:@"View Repo" detailTitle:@"View the tweak's source code on GitHub" url:@"https://github.com/SoCuul/SCInsta" iconURL:nil]
         ]];
         
         [self collectDynamicSpecifiersFromArray:_specifiers];

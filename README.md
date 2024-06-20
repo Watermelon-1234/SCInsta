@@ -1,13 +1,15 @@
 # SCInsta
 A feature-rich tweak for Instagram on iOS!\
-`Version v0.4.0` | `Tested on Instagram v330.0.0`
+`Version v0.4.1` | `Tested on Instagram v330.0.0`
 
 ---
 
-> [!NOTE]  
-> &nbsp;&nbsp;❓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If you have any questions, visit the [Discussions](https://github.com/SoCuul/SCInsta/discussions) tab
+> [!NOTE]
+> ❓ &nbsp;If you have any questions or need help with the tweak, visit the [Discussions](https://github.com/SoCuul/SCInsta/discussions) tab
+>
+> ✨ &nbsp;If you have a feature request, [click here](https://github.com/SoCuul/SCInsta/issues/new?labels=enhancement&title=feat:%20replace%20this%20text%20with%20your%20feature%20request)\
+> 🐛 &nbsp;If you have a bug report, [click here](https://github.com/SoCuul/SCInsta/issues/new?labels=bug&title=bug:%20replace%20this%20with%20a%20summary%20of%20the%20issue%20you're%20experiencing)
 > 
-> ✨ 🐛 &nbsp; If you want to submit a feature request/bug report, visit the [Issues](https://github.com/SoCuul/SCInsta/issues) tab
 
 ---
 
@@ -70,7 +72,7 @@ A feature-rich tweak for Instagram on iOS!\
 1. Install iOS 14.5 frameworks for theos
    1. [Click to download iOS SDKs](https://github.com/xybp888/iOS-SDKs/archive/refs/heads/master.zip)
    2. Unzip, then copy the `iPhoneOS14.5.sdk` folder into `~/theos/sdks`
-2. Clone SCInsta repo from GitHub: `git clone --recurse-submodules https://github.com/SoCuul/SCInsta --branch v0.4.0`
+2. Clone SCInsta repo from GitHub: `git clone --recurse-submodules https://github.com/SoCuul/SCInsta --branch v0.4.1`
 3. **For sideloading**: Download a decrypted Instagram IPA from a trusted source, making sure to rename it to `com.burbn.instagram.ipa`.
    Then create a folder called `packages` inside of the `SCInsta` folder, and move the Instagram IPA file into it. 
 

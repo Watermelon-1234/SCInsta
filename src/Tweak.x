@@ -9,7 +9,7 @@
 #import "Controllers/SettingsViewController.h"
 
 // * Tweak version *
-NSString *SCIVersionString = @"v0.4.0";
+NSString *SCIVersionString = @"v0.4.1";
 
 // Variables that work across features
 BOOL seenButtonEnabled = false;
@@ -261,9 +261,7 @@ static BOOL isAuthenticationShowed = FALSE;
 - (void)viewDidLoad {
     %orig;
     
-    [self addHandleLongPress];
-}
-%new - (void)addHandleLongPress {
+    // Recognize 5-finger long press
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     longPress.minimumPressDuration = 1;
     longPress.numberOfTouchesRequired = 5;
