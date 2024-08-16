@@ -3,16 +3,57 @@
 
 static NSArray *removeAdsItemsInList(NSArray *list, BOOL isFeed) {
     NSMutableArray *orig = [list mutableCopy];
+
     [orig enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         // Remove suggested posts
         if (isFeed && [SCIManager removeSuggestedPost]) {
-            if ([obj respondsToSelector:@selector(explorePostInFeed)] && [obj performSelector:@selector(explorePostInFeed)]) {
+            if (
+                ([obj respondsToSelector:@selector(explorePostInFeed)] && [obj performSelector:@selector(explorePostInFeed)])
+                || ([obj isKindOfClass:%c(IGFeedGroupHeaderViewModel)] && [[obj title] isEqualToString:@"Suggested Posts"])
+            ) {
                 NSLog(@"[SCInsta] Removing suggested posts");
 
                 [orig removeObjectAtIndex:idx];
             }
         }
 
+        // Remove suggested reels (carousel)
+        if (isFeed && [SCIManager removeSuggestedReels]) {
+            if ([obj isKindOfClass:%c(IGFeedScrollableClipsModel)]) {
+                NSLog(@"[SCInsta] Hiding suggested reels: reels carousel");
+
+                [orig removeObjectAtIndex:idx];
+            }
+        }
+        
+        // Remove suggested stories (carousel)
+        if (isFeed && [SCIManager removeSuggestedReels]) {
+            if ([obj isKindOfClass:%c(IGInFeedStoriesTrayModel)]) {
+                NSLog(@"[SCInsta] Hiding suggested reels: stories carousel");
+
+                [orig removeObjectAtIndex:idx];
+            }
+        }
+        
+        // Remove suggested for you (accounts)
+        if (isFeed && [SCIManager removeSuggestedAccounts]) {
+            if ([obj isKindOfClass:%c(IGHScrollAYMFModel)]) {
+                NSLog(@"[SCInsta] Hiding suggested for you");
+
+                [orig removeObjectAtIndex:idx];
+            }
+        }
+
+        // Remove suggested threads posts (carousel)
+        if (isFeed && [SCIManager removeSuggestedThreads]) {
+            if ([obj isKindOfClass:%c(IGBloksFeedUnitModel)] || [obj isKindOfClass:objc_getClass("IGThreadsInFeedModels.IGThreadsInFeedModel")]) {
+                NSLog(@"[SCInsta] Hiding threads posts");
+
+                [orig removeObjectAtIndex:idx];
+            }
+        }
+
+        // Remove ads
         if (([obj isKindOfClass:%c(IGFeedItem)] && ([obj isSponsored] || [obj isSponsoredApp])) || [obj isKindOfClass:%c(IGAdItem)]) {
             NSLog(@"[SCInsta] Removing ads");
 
@@ -143,5 +184,22 @@ static NSArray *removeAdsItemsInList(NSArray *list, BOOL isFeed) {
     }
     
     return %orig;
+}
+%end
+
+// Hide "suggested for you" text at end of feed
+%hook IGEndOfFeedDemarcatorCellTopOfFeed
+- (void)configureWithViewConfig:(id)arg1 {
+    %orig;
+
+    if ([SCIManager removeSuggestedPost]) {
+        NSLog(@"[SCInsta] Hiding end of feed message");
+
+        // Hide suggested for you text
+        UILabel *_titleLabel = MSHookIvar<UILabel *>(self, "_titleLabel");
+        [_titleLabel setText:@""];
+    }
+
+    return;
 }
 %end
